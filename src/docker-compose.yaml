@@ -1,0 +1,29 @@
+services:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: tokodb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+    ports:
+      - "5432:5432" 
+    volumes:
+      - tokodbdata:/var/lib/postgresql/data 
+    restart: unless-stopped
+
+  backend:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:80"
+      - "5050:5050"  
+    depends_on:
+      - db
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=db;Database=tokodb;Port=5432;Username=postgres;Password=123;
+    restart: unless-stopped
+
+volumes:
+  tokodbdata: 

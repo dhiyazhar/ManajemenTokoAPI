@@ -6,7 +6,8 @@ EXPOSE 8081
 RUN dotnet tool install --global dotnet-ef
 ENV PATH $PATH:/root/.dotnet/tools
 
-FROM base AS development
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["ManajemenToko.sln", "./"]
 COPY ["src/src.csproj", "src/"]
